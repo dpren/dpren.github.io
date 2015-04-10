@@ -11,6 +11,7 @@ bufferLoader.load();
 
 
 var cycleSounds = ctx.createGain();
+cycleSounds.gain.value = 2;
 cycleSounds.panner = ctx.createPanner();
 cycleSounds.panner.panningModel = "equalpower" // "HRTF" realism, "equalpower" performance
 
@@ -38,44 +39,44 @@ var playSound = function(buffer, vol, pitch, loop) {
 
 
 
-function makeDistortionCurve(amount) {
-  var k = typeof amount === 'number' ? amount : 50,
-    n_samples = 44100,
-    curve = new Float32Array(n_samples),
-    deg = Math.PI / 180,
-    i = 0,
-    x;
-  for ( ; i < n_samples; ++i ) {
-    x = i * 2 / n_samples - 1;
-    curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-  }
-  return curve;
-};
+// function makeDistortionCurve(amount) {
+//   var k = typeof amount === 'number' ? amount : 50,
+//     n_samples = 44100,
+//     curve = new Float32Array(n_samples),
+//     deg = Math.PI / 180,
+//     i = 0,
+//     x;
+//   for ( ; i < n_samples; ++i ) {
+//     x = i * 2 / n_samples - 1;
+//     curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+//   }
+//   return curve;
+// };
 
-var oscillator = function(osctype, vol, pitch){
+// var oscillator = function(osctype, vol, pitch){
 
- var osc = ctx.createOscillator();
- var gainNode = ctx.createGain();
- var distortion = ctx.createWaveShaper();
-   distortion.curve = makeDistortionCurve(200);
-   distortion.oversample = '4x';
+//  var osc = ctx.createOscillator();
+//  var gainNode = ctx.createGain();
+//  var distortion = ctx.createWaveShaper();
+//    distortion.curve = makeDistortionCurve(200);
+//    distortion.oversample = '4x';
 
- osc.type = osctype;
- osc.frequency.value = pitch;
- osc.connect(cycleSounds);
+//  osc.type = osctype;
+//  osc.frequency.value = pitch;
+//  osc.connect(cycleSounds);
 
- distortion.connect(cycleSounds);
+//  distortion.connect(cycleSounds);
   
- gainNode.connect(ctx.destination);
- gainNode.gain.value = vol;
+//  gainNode.connect(ctx.destination);
+//  gainNode.gain.value = vol;
 
- osc.start();
+//  osc.start();
 
- return {
-   osc: osc,
-   gainNode: gainNode
- };
-};
+//  return {
+//    osc: osc,
+//    gainNode: gainNode
+//  };
+// };
 
 
 var engineSound;
