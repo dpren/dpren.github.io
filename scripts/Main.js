@@ -31,6 +31,7 @@ var halfPi = Math.PI/2;
 	var stats = new Stats();
 		stats.domElement.style.position = 'absolute';
 		stats.domElement.style.top = '0px';
+		stats.domElement.style.visibility="hidden";
 		document.body.appendChild( stats.domElement );
 
 
@@ -39,6 +40,26 @@ var halfPi = Math.PI/2;
 
 
 
+var wallAccelRange = 15;
+
+
+var yellowMaterial = new THREE.MeshLambertMaterial({
+		color: 0xffff00,
+		transparent: true,
+		opacity: 0.8
+	});
+var ind = new THREE.BoxGeometry(0.5, 0.5, 0.8);
+var indicator = new THREE.Mesh( ind, yellowMaterial );
+	indicator.position.set(0,5,0);
+	indicator.rotateX(halfPi);
+
+var lineMaterial = new THREE.LineBasicMaterial({
+        color: 0xff00ff
+    });
+var bounds = new THREE.Geometry();
+	bounds.vertices.push(new THREE.Vector3(0, 0, -wallAccelRange));
+	bounds.vertices.push(new THREE.Vector3(0, 0, wallAccelRange));
+var boundsLine = new THREE.Line(bounds, lineMaterial);
 
 
 
@@ -53,7 +74,7 @@ scene.add(gridHelper);
 /*—–––––––––––cycle constructor—–––––––––––*/
 var createLightcycle = function(colorCode, x, z) {
 
-	var material = new THREE.MeshLambertMaterial({
+	var material = new THREE.MeshPhongMaterial({
 		color: colorCode,
 		transparent: true,
 		opacity: 0.8
@@ -73,7 +94,7 @@ var createLightcycle = function(colorCode, x, z) {
 		fwheel.rotateX(halfPi);
 		scene.add(fwheel);
 
-	// ye olde light-tractor xD
+	// ye olde light-tractor
 	var cycle = new THREE.Object3D();
 		cycle.add(cube);
 		cycle.add(bwheel);
@@ -141,8 +162,8 @@ var turnCoords = [];
 
 
 var paused = true;
-var showStats = true
-var view = 3;
+var showStats = false;
+var view = 0;
 
 var dir = 1; // cycle direction
 var lastDir;
@@ -151,6 +172,9 @@ var maxTailLength = 600;
 
 var easing = 0.08;
 var friction = 0.005;
+
+var wallAccel = false;
+var wallAccelAmount = 0;
 
 var brakeFactor = 0.5;
 var boostFactor = 1.5;
@@ -167,7 +191,7 @@ var constrain = function(min, max) {
     	return Math.max(min, Math.min(n, max));
 	};
 }
-var constrainSpeed = constrain(0.5, 5);  // min/max speed
+var constrainSpeed = constrain(0.7, 5);  // min/max speed
 
 var turnDelay = 0.2;
 var blastRadius = 1.5;
@@ -184,23 +208,18 @@ var spawnCycle = function() {
 	playerSpeed = startingSpeed;
 	scene.add(lightcycle);
 
-
 	engineSound = playSound(bufferLoader.bufferList[0], 0.6, 1, true);
-	//engineSound2 = playSound(bufferLoader.bufferList[2], 0.3, 1, true);
-	//engineOsc = oscillator('triangle', 0.07, 100);
 
 	document.querySelector('#press-z').style.visibility = "hidden";
 };
 
 var turnCycle = {
 	left: function() {
-		
 		++dir;
 		lightcycle.rotateY(halfPi);
 		if(dir > 3){dir = 0;}
 	},
 	right: function() {
-		
 		--dir;
 		lightcycle.rotateY(-halfPi);
 		if(dir < 0){dir = 3;}
@@ -208,9 +227,7 @@ var turnCycle = {
 };
 
 var executeTurn = function(callback) { // for stuff like turn delay, idk
-	
 	callback(); 
-	
 };
 
 var addTurnCoords = function (d) {
@@ -243,25 +260,16 @@ var crash = function() {
 	playerSpeed = 0;
 	lightcycle.alive = false;
 	scene.remove(lightcycle);
-	//wall.scale.x -= blastRadius;
+	wall.scale.x -= blastRadius;
 
 	explosionSound = playSound(bufferLoader.bufferList[1], 1.0, 1, false);
 	engineSound.stop();
-	//engineSound2.stop();
-	//engineOsc.osc.stop();
 
 	setTimeout(function(){RENDER_LIST.push(collapseWalls)}, 1000);
 };
 
-// var cycleBroadBounds = function() {
-// 	var v = {};
-// 	v.left = lightcycle.position.z + 50;
-// 	v.right = lightcycle.position.z + 50;
-// 	return v;
-// };
 
 var ghettoAI = function() {
-	console.log('im sorry dave');
 	if (Math.random() > 0.5) { 
 		turnCycle.left();
 	} else {
@@ -271,53 +279,75 @@ var ghettoAI = function() {
 
 var collisionDetection = function() {
 	
-	if (lightcycle.position.x >= gridSize || lightcycle.position.x <= -gridSize || lightcycle.position.z >= gridSize || lightcycle.position.z <= -gridSize) {
+	if (lightcycle.position.x >= gridSize || lightcycle.position.x <= -gridSize ||
+		lightcycle.position.z >= gridSize || lightcycle.position.z <= -gridSize) {
 		crash();
 		return;
 	} else {
+
+
 		for (var w = 2; w < turnCoords.length; w += 1) {
 
-			
-			if (
-				doLineSegmentsIntersect(
+			if (doLineSegmentsIntersect(
 										turnCoords[turnCoords.length-1],
 										lightcycle.position,
 										turnCoords[w-2],
 										turnCoords[w-1]
 										)
-				=== true ){
+				=== true ) {
 
 				crash();
 				return;
 			}
-		}
-	}
+		}	
+		
 
-	
-	if (lightcycle.autoPilot) {
+		var cycleLeft = lightcycle.clone().translateZ( -wallAccelRange );
+		var cycleRight = lightcycle.clone().translateZ( wallAccelRange );
 
-		var cycleTrajectory = lightcycle.clone().translateX( 5 );
+		for (var w = 2; w < turnCoords.length; w += 1) {
 
-		if (cycleTrajectory.position.x >= gridSize || cycleTrajectory.position.x <= -gridSize || cycleTrajectory.position.z >= gridSize || cycleTrajectory.position.z <= -gridSize) {
-			ghettoAI();
-			return;
-		} else {
-			for (var w = 2; w < turnCoords.length; w += 1) {
-				if ( 
-					doLineSegmentsIntersect(
-											turnCoords[turnCoords.length-1],
-											cycleTrajectory.position,
-											turnCoords[w-2],
-											turnCoords[w-1]
-											)
-					=== true ){
-					ghettoAI();
-					return;
-				}
+			var accelIntersect = doAccelLineSegmentsIntersect(
+										cycleLeft.position,
+										cycleRight.position,
+										turnCoords[w-2],
+										turnCoords[w-1]
+										);
+			if ( accelIntersect.check === true ) {
+
+				wallAccelAmount = ((wallAccelRange - accelIntersect.pointDist)/150)+1;
+
+				wallAccel = true;
+				return; // possibly skips walls
 			}
 		}
+		wallAccelAmount = 0;
+		wallAccel = false;
 	}
-}; 
+	
+	// if (lightcycle.autoPilot) {
+	// 	var cycleTrajectory = lightcycle.clone().translateX( 5 );
+	// 	if (cycleTrajectory.position.x >= gridSize || cycleTrajectory.position.x <= -gridSize ||
+	//  		cycleTrajectory.position.z >= gridSize || cycleTrajectory.position.z <= -gridSize) {
+	// 		ghettoAI();
+	// 		return;
+	// 	} else {
+	// 		for (var w = 2; w < turnCoords.length; w += 1) {
+	// 			if (
+	// 				doLineSegmentsIntersect(
+	// 										turnCoords[turnCoords.length-1],
+	// 										cycleTrajectory.position,
+	// 										turnCoords[w-2],
+	// 										turnCoords[w-1]
+	// 										)
+	// 				=== true ){
+	// 				ghettoAI();
+	// 				return;
+	// 			}
+	// 		}
+	// 	}
+	// }
+};
 
 
 var onKeyDown = function(e) {
@@ -339,7 +369,11 @@ var onKeyDown = function(e) {
 					paused = !paused;
 					if (!paused) {
 						document.querySelector('#pause-msg').style.visibility="hidden";
-						cycleSounds.gain.value = 2;
+						if (view !== 4) {
+							cycleSounds.gain.value = 10;
+						} else {
+							cycleSounds.gain.value = 0;
+						}
 					} else {
 						document.querySelector('#pause-msg').style.visibility="visible";
 						cycleSounds.gain.value = 0;
@@ -349,8 +383,10 @@ var onKeyDown = function(e) {
 					showStats = !showStats;
 					if (showStats) {
 						stats.domElement.style.visibility="visible";
+						lightcycle.add(boundsLine);
 					} else {
 						stats.domElement.style.visibility="hidden";
+						lightcycle.remove(boundsLine);
 					}
 					break;
 		case 86: // v
@@ -360,7 +396,10 @@ var onKeyDown = function(e) {
 							wallParent.children[wallParent.children.length-1].visible = true;
 						}
 						lightcycle.visible = true;
+						setTimeout(function(){cycleSounds.gain.value = 10}, 150);
 						view = 0;
+					} else if (view === 4) {
+						cycleSounds.gain.value = 1;
 					}
 					break;
 		case 87: // w
@@ -376,8 +415,13 @@ var onKeyDown = function(e) {
 						lightcycle.respawnAvailable = false;
 					}
 					break;
-		case 20: // caps
-						lightcycle.autoPilot = !lightcycle.autoPilot;
+		case 192: // `
+					lightcycle.autoPilot = !lightcycle.autoPilot;
+					if (lightcycle.autoPilot) {
+						lightcycle.add(indicator);
+					} else {
+						lightcycle.remove(indicator);
+					}
 					break;
     }
 };
@@ -439,12 +483,22 @@ var cameraView = function() {
 
 var moveStuff = function() {
 
+
 	if (keyboard.pressed('space')) {
+
 		targetSpeed = constrainSpeed(playerSpeed*brakeFactor);
-		friction = 0.05;
+		friction = 0.03;
+
 	} else if (keyboard.pressed('b')) {
+
 		targetSpeed = constrainSpeed(playerSpeed*boostFactor);
 		friction = 0.05;
+
+	} else if (wallAccel) {
+
+		targetSpeed = Math.max(regularSpeed+0.2, playerSpeed*wallAccelAmount);
+		friction = 0.05;
+
 	} else {
 
 		targetSpeed = regularSpeed;		
@@ -457,7 +511,7 @@ var moveStuff = function() {
 		} else { // coasting
 
 			lastPlayerSpeed = playerSpeed;
-			friction = 0.005;
+			friction = 0.002;
 		}
 	}
 
@@ -474,7 +528,7 @@ var moveStuff = function() {
 		addTurnCoords(dir);
 
 		if (lastDir !== null) { // skip respawn
-
+			
 			turnSound = playSound(bufferLoader.bufferList[1], 0.7, 10, false);
 
 			targetSpeed = constrainSpeed(playerSpeed*turnSpeedFactor);
@@ -489,14 +543,14 @@ var moveStuff = function() {
 
 	lightcycle.translateX( playerSpeed );  // move lightcycle
 
-	wall.scale.x += playerSpeed;  // grow wall
+	wall.scale.x += playerSpeed;  // grow current wall
 	wallParent.netLength += playerSpeed;
 
 	if (wallParent.netLength > maxTailLength) {
 
-		wallParent.children[0].translateX( playerSpeed );
+		wallParent.children[0].scale.x -= playerSpeed; // shrink wrong side of last wall
+		wallParent.children[0].translateX( playerSpeed ); // re-connect last wall
 		
-		wallParent.children[0].scale.x -= playerSpeed; // shrink wall
 		wallParent.netLength -= playerSpeed;
 
 
@@ -528,8 +582,6 @@ var moveStuff = function() {
 var audioMixing = function() {
 
 	engineSound.playbackRate.value = playerSpeed;
-	//engineSound2.playbackRate.value = playerSpeed * 1.8;
-	//engineOsc.osc.frequency.value = playerSpeed * 110;
 
 	cycleSounds.panner.setPosition(lightcycle.position.x, lightcycle.position.y, lightcycle.position.z);
 	ctx.listener.setPosition(camera.position.x, camera.position.y, camera.position.z);
@@ -538,16 +590,13 @@ var audioMixing = function() {
 	var mx = m.elements[12], my = m.elements[13], mz = m.elements[14];
 	m.elements[12] = m.elements[13] = m.elements[14] = 0;
 
-	// Multiply the orientation vector by the world matrix of the camera.
 	var vec = new THREE.Vector3(0,0,1);
 	vec.applyProjection(m);
 	vec.normalize();
-	// Multiply the up vector by the world matrix.
 	var up = new THREE.Vector3(0,-1,0);
 	up.applyProjection(m);
 	up.normalize();
 
-	// Set the orientation and the up-vector for the listener.
 	ctx.listener.setOrientation(vec.x, vec.y, vec.z, up.x, up.y, up.z);
 
 	m.elements[12] = mx;
@@ -566,8 +615,8 @@ var animate = function() {
 	if (!paused) {
 
 		if (lightcycle.alive) {
-			collisionDetection();
 			moveStuff();
+			collisionDetection();
 		}
 		
 		for (var r = 0; r < RENDER_LIST.length; r += 1) {
@@ -580,9 +629,7 @@ var animate = function() {
 	
 	cameraView();
 
-
 	
-
 
 	stats.update();
 	renderer.render(scene, camera);
@@ -598,6 +645,7 @@ var startGame = function(e) {
 		document.querySelector('#welcome-msg').style.visibility = "hidden";
 		document.removeEventListener('keydown', startGame);
 		spawnCycle();
+		audioMixing();
 	}
 }
 document.addEventListener('keydown', startGame);
