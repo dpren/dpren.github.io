@@ -500,13 +500,13 @@ var onKeyDown = function (e) {
 		case 68:
 		case 83:
 		case 65: 	
-					turnStack.push(turnLeft);
+					if (paused === false) turnStack.push(turnLeft);
 					break;
 		case 74: // right
 		case 75:
 		case 76:
 		case 186: 	
-					turnStack.push(turnRight);
+					if (paused === false) turnStack.push(turnRight);
 					break;
 
 		case 80: // p
