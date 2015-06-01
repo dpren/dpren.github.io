@@ -1,0 +1,157 @@
+@font-face {
+    font-family: nicefont;
+    src: url(../fonts/nicefont.woff);
+}
+
+@font-face {
+    font-family: fontawesome;
+    src: url(../fonts/fontawesome.woff);
+}
+
+* {
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	font-weight: 300;
+	font-family:  fontawesome, sans-serif;
+}
+
+html {
+	width: 100%;
+	height: 100%
+	overflow: hidden;
+}
+
+body {
+	overflow-y: hidden;
+}
+
+canvas {
+	width: 100%;
+	height: 100%;
+}
+
+b {
+	//font-weight: bold;
+	color: yellow;
+}
+
+a {
+	text-decoration: none;
+	color: yellow;
+}
+
+#pause-msg {
+	font-family:  fontawesome, sans-serif;
+	opacity: 0.3;
+	margin-bottom: 30px;
+}
+
+#press-z {
+	font-family:  fontawesome, sans-serif;
+	opacity: 0.4;
+	visibility: hidden;
+	margin-bottom: 10px;
+}
+
+#press-x {
+	font-family:  fontawesome, sans-serif;
+	opacity: 0.4;
+	visibility: hidden;
+}
+
+#welcome-msg {
+	position: absolute;
+	width: 100%;	
+	height: 100%;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	background-color: rgba(10,10,10, 0.8);
+}
+
+#promptbox {
+	position: absolute;
+	color: #ffffff;
+	opacity: 0.85;
+	font-family:  nicefont, sans-serif;
+	letter-spacing: 4px;
+	text-align: center;
+	top: 14%;
+	width: 100%;
+}
+
+
+
+
+.gauge-values {
+	position: absolute;
+	color: #ffffff;
+	opacity: 0.85;
+	font-size: 10px;
+}
+
+
+#rubber-gauge {
+	position: absolute;
+	bottom: 20px;
+	left: 100px;
+	height: 3px;
+	width: 0px;
+	background-color: rgb(0,255,0);
+}
+#rubber-gauge-min {
+	left: 100px;
+	bottom: 5px;
+}
+#rubber-label {
+	left: 155px;
+	bottom: 5px;
+}
+#rubber-gauge-max {
+	left: 245px;
+	bottom: 5px;
+}
+
+
+#speed-gauge {
+	position: absolute;
+	bottom: 20px;
+	left: 350px;
+	height: 3px;
+	width: 0px;
+	background-color: rgb(0,255,0);
+}
+#speed-gauge-min {
+	left: 350px;
+	bottom: 5px;
+}
+#speed-label {
+	left: 405px;
+	bottom: 5px;
+}
+#speed-gauge-max {
+	left: 495px;
+	bottom: 5px;
+}
+
+
+#brake-gauge {
+	position: absolute;
+	bottom: 20px;
+	left: 600px;
+	height: 3px;
+	width: 0px;
+	background-color: rgb(0,255,0);
+}
+#brake-gauge-min {
+	left: 600px;
+	bottom: 5px;
+}
+#brake-label {
+	left: 655px;
+	bottom: 5px;
+}
+#brake-gauge-max {
+	left: 745px;
+	bottom: 5px;
+}
