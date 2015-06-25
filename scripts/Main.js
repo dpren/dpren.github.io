@@ -878,9 +878,13 @@ var activateAI = function(cycle) {
 		if (cycle.wallAccelLEFT && cycle.wallAccelRIGHT) {
 
 			if (cycle.forceTurn === 1) {
+
 				cycle.turnStack.push(turnLeft(cycle));
+
 			} else if (cycle.forceTurn === -1) {
+
 				cycle.turnStack.push(turnRight(cycle));
+				
 			} else {
 
 				// go towards bigger gap
