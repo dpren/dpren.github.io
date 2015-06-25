@@ -39,7 +39,8 @@ var startGame = function(e) {
 			otherPlayers[0] = spawnCycle(otherPlayers[0], 300, 0, 3, true);
 			changeViewTargetTo(0);
 
-			function start() {
+			
+			setTimeout( function () {
 				
 				hideElement(welcome, inputEl);
 				
@@ -47,10 +48,10 @@ var startGame = function(e) {
 				document.addEventListener('keydown', handleKeyDown, false);
 				document.addEventListener('keyup', handleKeyUp, false);
 				THREEx.FullScreen.bindKey();
-
+				
 				pause();
-			};
-			setTimeout(start, 350);
+
+			}, 350);
 		}
 	}
 };
