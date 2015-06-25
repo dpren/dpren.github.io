@@ -61,11 +61,8 @@ var initGame = function() {
 	camera.lookAt(player1.position);
 
 	gauge.rubber.max.innerHTML = gauge.rubber.maxVal;
-	//gauge.rubber.maxVal = maxRubber;
 	gauge.speed.max.innerHTML = gauge.speed.maxVal;
-	//gauge.speed.maxVal = maxSpeed;
 	gauge.brakes.max.innerHTML = gauge.brakes.maxVal;
-	//gauge.brakes.maxVal = maxBrakes;
 
 	document.getElementById('usernameInput').focus();
 
