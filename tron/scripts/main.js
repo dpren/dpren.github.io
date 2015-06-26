@@ -1,8 +1,19 @@
 "use strict";
 
+// var cycleConfig = {
+// 	x:  -300,
+// 	z: -2,
+// 	dir: 0,
+// 	colorCode: 0x0044ff,
+// 	engineType: 0,
+// 	ai: false,
+// 	playerID: 1,
+// 	name: "player 1"
+// };
 
+
+// var player1 = _createLightcycle(cycleConfig);
 var player1 = createLightcycle(-300, -2, 0, 0x0044ff, 0, false, 1, "player 1");
-
 
 otherPlayers.push(createLightcycle(0, 0, 0, 0xff6600, 1, true, 2, "player 2"));
 otherPlayers.push(createLightcycle(0, 0, 0, 0x44ff00, 2, true, 3, "player 3"));
@@ -18,7 +29,7 @@ otherPlayers.push(createLightcycle(0, 0, 0, 0xdd0099, 4, true, 5, "player 5"));
 
 
 var addWall = function(cycle) {
-	// has 2 children: line and wall
+	// has 2 children: wall and line
 	cycle.currentWall = createWall(cycle.color);
 	cycle.currentWall.quaternion.copy(cycle.quaternion);
 	cycle.currentWall.position.x = cycle.position.x;
@@ -27,6 +38,7 @@ var addWall = function(cycle) {
 
 	cycle.walls.add(cycle.currentWall);
 };
+
 
 
 

@@ -67,15 +67,13 @@ var constrainSpeed = constrain(regularSpeed*.7, maxSpeed);
 var halfPi = Math.PI/2;
 
 
-
 var otherPlayers = [];
 var activePlayers = [];
-
+var rimCoords = [];
 
 
 var paused = true;
 var showInfo = false;
 var view = 0;
 var viewTarget = 0;
-
 

@@ -2,8 +2,10 @@
 
 
 
+var grid;
 var arenaSize = 390;
 var gridTileSize = 3;
+var gridHQ = false;
 
 var easing = 0.08;
 
@@ -38,3 +40,4 @@ var regularSpeed = maxSpeed/3;
 var startingSpeed = regularSpeed/2;
 
 var panningModel = "equalpower";
+var duckMode = false;

@@ -66,119 +66,175 @@ scene.add( ambLight );
 
 
 
-/*—–––––––––––––––line grid—–––––––––––––––*/
-// var floorTexture = new THREE.ImageUtils.loadTexture( 'images/grid09.png' );
-// floorTexture.wrapS = THREE.RepeatWrapping;
-// floorTexture.wrapT = THREE.RepeatWrapping;
-// floorTexture.repeat.set(arenaSize/(gridTileSize), arenaSize/(gridTileSize));
+/*—–––––––––––––––grid—–––––––––––––––*/
+var anisotropy = 16;
+var createGrid = function(q) {
 
-// var maxAnisotropy = renderer.getMaxAnisotropy();
-// floorTexture.anisotropy = maxAnisotropy;
+	if (q === true) {
 
-// var floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture/*, transparent: true, side: THREE.DoubleSide */});
-// var floorGeometry = new THREE.PlaneBufferGeometry(arenaSize*2, arenaSize*2, 1, 1);
+		scene.remove(grid);
 
-// var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-// floor.geometry.dynamic = true;
+		var floorTexture = new THREE.ImageUtils.loadTexture( 'images/grid09.png' );
+		floorTexture.wrapS = THREE.RepeatWrapping;
+		floorTexture.wrapT = THREE.RepeatWrapping;
+		floorTexture.repeat.set(arenaSize/(gridTileSize), arenaSize/(gridTileSize));
 
-// floor.rotateX(-halfPi);
-// scene.add(floor);
+		// var anisotropy = renderer.getMaxAnisotropy(); // === 16
+		floorTexture.anisotropy = anisotropy;
 
+		var floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture/*, transparent: true, side: THREE.DoubleSide */});
+		var floorGeometry = new THREE.PlaneBufferGeometry(arenaSize*2, arenaSize*2, 1, 1);
 
-var gridHelper = new THREE.GridHelper(arenaSize, 6);
-gridHelper.setColors(0x555555,0x555555);
-scene.add(gridHelper);
+		grid = new THREE.Mesh(floorGeometry, floorMaterial);
+		grid.geometry.dynamic = true;
 
+		grid.rotateX(-halfPi);
+		scene.add(grid);
 
-var rimCoords = [{
-		x: arenaSize,
-		z: arenaSize
-	}, {
-		x: -arenaSize,
-		z: arenaSize
-	}, {
-		x: -arenaSize,
-		z: -arenaSize
-	}, {
-		x: arenaSize,
-		z: -arenaSize
-	}, {
-		x: arenaSize,
-		z: arenaSize
+	} else if (q === false || q === undefined) {
+
+		scene.remove(grid);
+
+		grid = new THREE.GridHelper(arenaSize, 6);
+		grid.setColors(0x555555,0x555555);
+		scene.add(grid);
+	}
+
+	rimCoords = [{
+			x: arenaSize,
+			z: arenaSize
+		}, {
+			x: -arenaSize,
+			z: arenaSize
+		}, {
+			x: -arenaSize,
+			z: -arenaSize
+		}, {
+			x: arenaSize,
+			z: -arenaSize
+		}, {
+			x: arenaSize,
+			z: arenaSize
 	}];
+};
 /*–––––––––––––––––––––––––––––––––––––––––*/
 
 
 
 
+
+
+
+/*—–––––––––––cycle constructor—–––––––––––*/
+// var _createLightcycle = function (cfg) {
+
+
+// 	var duckMaterial = new THREE.MeshLambertMaterial({
+// 		map: THREE.ImageUtils.loadTexture('models/duck.jpg')
+// 		// ,color: cfg.colorCode
+// 	});
+// 	var loader = new THREE.JSONLoader();
+
+
+// 	var cycle = new THREE.Object3D();
+
+// 		cycle.model = cycleModel(cfg.colorCode);
+// 		cycle.add(cycle.model);
+		
+
+// 		loader.load( "models/duck.js", function( geometry ) {
+// 		    cycle.duck = new THREE.Mesh( geometry, duckMaterial);
+// 		    cycle.duck.scale.set( 0.05, 0.05, 0.05 );
+// 		    cycle.duck.position.y = -2.5;
+// 		    cycle.duck.position.x = -2;
+// 		    cycle.duck.rotation.x = Math.PI/2;
+// 		    cycle.duck.visible = false;
+// 		    cycle.add(cycle.duck);
+// 		});
+
+
+
+// 		cycle.position.set(cfg.x, 2, cfg.z);
+
+// 		cycle.color = cfg.colorCode;
+// 		cycle.lightUpColor = darkestRGB(cfg.colorCode);
+
+// 		cycle.rotation.set(0,-1.5707963267948966,0);
+// 		cycle.dir = cfg.dir;
+// 		cycle.rotateY(halfPi * cfg.dir);
+		
+// 		cycle.walls = new THREE.Object3D();
+// 		cycle.walls.children = [];
+// 		cycle.walls.scale.y = 1;
+// 		cycle.walls.netLength = 0;
+// 		cycle.currentWall;
+// 		scene.add(cycle.walls);
+
+// 		cycle.turned = false;
+// 		cycle.turnStack = [];
+// 		cycle.lastTurnTime = clock.getElapsedTime();
+// 		cycle.windingOrder = 0;
+// 		cycle.forceTurn = 0;
+
+// 		cycle.rubber = 0;
+// 		cycle.rubberMinDistance = rubberMinDistance; // initial stopDistance
+// 		cycle.rubberMinAdjust = rubberMinAdjust; // factor that stopDistance gets reduced by on each successive dig
+// 		cycle.stopDistance = cycle.rubberMinDistance; // absolute max depth you can dig
+
+// 		cycle.speed = startingSpeed;
+// 		cycle.targetSpeed = regularSpeed;
+// 		cycle.lastSpeed = cycle.speed;
+// 		cycle.friction = 0.005;
+
+// 		cycle.braking = false;
+// 		cycle.brakes = 0;
+// 		cycle.boosting = false;
+
+// 		cycle.wallAccel = false;
+// 		cycle.wallAccelAmount;
+// 		cycle.collisionLEFT;
+// 		cycle.collisionRIGHT;
+// 		cycle.collisionLEFTplayer;
+// 		cycle.collisionRIGHTplayer;
+// 		cycle.collisionLEFTdist;
+// 		cycle.collisionRIGHTdist;
+
+// 		cycle.collision = false;
+// 		cycle.stopped = false;
+// 		cycle.collisionHandled = false;
+
+
+// 		cycle.alive = true;
+// 		cycle.respawnAvailable = true;
+// 		cycle.AI = cfg.ai;
+
+// 		cycle.playerID = cfg.playerID;
+
+// 		cycle.name = cfg.name;
+// 		cycle.textLabel;
+
+// 		cycle.renderList = []; // lets you add/remove stuff to the animation loop dynamically
+
+// 		cycle.engineType = cfg.engineType;
+
+// 		cycle.audio = ctx.createGain();
+// 		cycle.audio.gain.value = 0.01;
+
+
+// 		cycle.audio.panner = ctx.createPanner();
+// 		cycle.audio.panner.panningModel = panningModel;
+
+// 		cycle.audio.connect(cycle.audio.panner);
+// 		cycle.audio.panner.connect(ctx.destination);
+
+
+// 	return cycle;
+// };
+/*–––––––––––––––––––––––––––––––––––––––––*/
+
+
 /*—–––––––––––cycle constructor—–––––––––––*/
 var createLightcycle = function (x, z, dir, colorCode, engineType, ai, playerID, name) {
-
-
-	var cycleMaterial = new THREE.MeshLambertMaterial({
-		map: THREE.ImageUtils.loadTexture('images/cautionsolid.png'),
-		color: colorCode,
-		transparent: true,
-		opacity: 1.0
-	});
-
-	var wireMaterial = new THREE.MeshBasicMaterial({
-		color: 0xffff00,
-		wireframe: true,
-		wireframeLinewidth: 2,
-		transparent: true,
-		opacity: 0.0
-	});
-
-
-
-	var cube = new THREE.Mesh(new THREE.BoxGeometry(5.5,4,2), cycleMaterial);
-		cube.position.set(-0.75, 0, 0);
-
-	var cubeWire = new THREE.Mesh(new THREE.BoxGeometry(5.5,4,2), wireMaterial);
-		cubeWire.position.set(-0.75, 0, 0);
-
-	var bcylinder = new THREE.CylinderGeometry(2, 2, 3, 16);
-	var bwheel = new THREE.Mesh( bcylinder, cycleMaterial );
-		bwheel.position.set(-1.5, 0, 0);
-		bwheel.rotateX(halfPi);
-
-	var bcylinderWire = new THREE.CylinderGeometry(2, 2, 3, 8, 1, true);
-	var bwheelWire = new THREE.Mesh( bcylinderWire, wireMaterial );
-		bwheelWire.position.set(-1.5, 0, 0);
-		bwheelWire.rotateX(halfPi);
-
-	var fcylinder = new THREE.CylinderGeometry(0.7, 0.7, 0.5, 10);
-	var fwheel = new THREE.Mesh( fcylinder, cycleMaterial );
-		fwheel.position.set(2, -1.3, 0);
-		fwheel.rotateX(halfPi);
-
-
-	var fcylinderWire = new THREE.CylinderGeometry(0.7, 0.7, 0.5, 8, 1, true);
-	var fwheelWire = new THREE.Mesh( fcylinderWire, wireMaterial );
-		fwheelWire.position.set(2, -1.3, 0);
-		fwheelWire.rotateX(halfPi);
-
-
-	var ecylinder = new THREE.CylinderGeometry(0.5, 0.5, 2.5, 4);
-	var eng = new THREE.Mesh( ecylinder, wireMaterial );
-		eng.position.set(-0.2, -1, 0);
-		eng.rotateZ(halfPi);
-
-	var windshieldMaterial = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
-
-	var windshieldgeom = new THREE.PlaneBufferGeometry(2.01, 0.9);
-	var windshield = new THREE.Mesh( windshieldgeom, windshieldMaterial );
-		windshield.position.set(2.01, 1.1, 0);
-		windshield.rotateY(halfPi);
-
-	var windshieldSideGeom = new THREE.PlaneBufferGeometry(1.45, 0.9);
-	var windshield2 = new THREE.Mesh( windshieldSideGeom, windshieldMaterial );
-		windshield2.position.set(1.285, 1.1, 1.01);
-	var windshield3 = new THREE.Mesh( windshieldSideGeom, windshieldMaterial );
-		windshield3.position.set(1.285, 1.1, -1.01);
-
-
 
 
 	var duckMaterial = new THREE.MeshLambertMaterial({
@@ -188,22 +244,11 @@ var createLightcycle = function (x, z, dir, colorCode, engineType, ai, playerID,
 	var loader = new THREE.JSONLoader();
 
 
-
 	var cycle = new THREE.Object3D();
-		cycle.model = new THREE.Object3D();
-		cycle.model.add(cube);
-		cycle.model.add(bwheel);
-		cycle.model.add(fwheel);
-		cycle.model.add(cubeWire);
-		cycle.model.add(bwheelWire);
-		cycle.model.add(fwheelWire);
-		cycle.model.add(eng);
-		cycle.model.add(windshield);
-		cycle.model.add(windshield2);
-		cycle.model.add(windshield3);
-		cycle.add(cycle.model);
 
-		cycle.duck;
+		cycle.model = cycleModel(colorCode);
+		cycle.add(cycle.model);
+		
 
 		loader.load( "models/duck.js", function( geometry ) {
 		    cycle.duck = new THREE.Mesh( geometry, duckMaterial);
@@ -211,9 +256,10 @@ var createLightcycle = function (x, z, dir, colorCode, engineType, ai, playerID,
 		    cycle.duck.position.y = -2.5;
 		    cycle.duck.position.x = -2;
 		    cycle.duck.rotation.x = Math.PI/2;
-		    cycle.add(cycle.duck);
 		    cycle.duck.visible = false;
+		    cycle.add(cycle.duck);
 		});
+
 
 
 		cycle.position.set(x, 2, z);

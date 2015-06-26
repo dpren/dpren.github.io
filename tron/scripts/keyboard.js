@@ -1,10 +1,12 @@
 "use strict";
 
-var duckMode = false;
+
 
 var handleKeyDown = function(e) {
 
-	if (event.repeat) {return;}
+	if (e.repeat) {
+		return;
+	}
 
 	switch ( e.keyCode ) {
 		case 70: // left
@@ -38,7 +40,9 @@ var handleKeyDown = function(e) {
 							activePlayers.forEach( function (cycle) {
 								cycle.audio.gain.setTargetAtTime(6, ctx.currentTime, 1.0);
 								cycle.textLabel.style.visibility = 'visible';
-								cycle.model.visible = true;
+								if (!duckMode) {
+									cycle.model.visible = true;
+								}
 							});
 						}
 					}
@@ -144,6 +148,10 @@ var handleKeyDown = function(e) {
 							cycle.duck.visible = false;
 						});
 					}
+					break;
+		case 48: // 0
+					gridHQ = !gridHQ;
+					createGrid(gridHQ);
 					break;
 		case 8:	// delete
 		case 9: // tab

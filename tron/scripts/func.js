@@ -166,7 +166,9 @@ var fixCockpitCam = function() {
 		if (cycle.walls.children.length) {
 			cycle.walls.children[ cycle.walls.children.length-1 ].visible = true;
 		}
-		cycle.model.visible = true;
+		if (!duckMode) {
+			cycle.model.visible = true;
+		}
 	});
 };
 
@@ -209,4 +211,86 @@ var animateCycle = function(cycle) {
 		cycle.model.children[5].rotation.y -= cycle.speed/2;
 		cycle.model.children[6].rotation.x += cycle.speed/3;
 	};
+};
+
+
+
+var cycleModel = function(colorCode) {
+
+	var cycleMaterial = new THREE.MeshLambertMaterial({
+		map: THREE.ImageUtils.loadTexture('images/cautionsolid.png'),
+		color: colorCode,
+		transparent: true,
+		opacity: 1.0
+	});
+
+	var wireMaterial = new THREE.MeshBasicMaterial({
+		color: 0xffff00,
+		wireframe: true,
+		wireframeLinewidth: 2,
+		transparent: true,
+		opacity: 0.0
+	});
+
+
+	var cube = new THREE.Mesh(new THREE.BoxGeometry(5.5,4,2), cycleMaterial);
+		cube.position.set(-0.75, 0, 0);
+
+	var cubeWire = new THREE.Mesh(new THREE.BoxGeometry(5.5,4,2), wireMaterial);
+		cubeWire.position.set(-0.75, 0, 0);
+
+	var bcylinder = new THREE.CylinderGeometry(2, 2, 3, 16);
+	var bwheel = new THREE.Mesh( bcylinder, cycleMaterial );
+		bwheel.position.set(-1.5, 0, 0);
+		bwheel.rotateX(halfPi);
+
+	var bcylinderWire = new THREE.CylinderGeometry(2, 2, 3, 8, 1, true);
+	var bwheelWire = new THREE.Mesh( bcylinderWire, wireMaterial );
+		bwheelWire.position.set(-1.5, 0, 0);
+		bwheelWire.rotateX(halfPi);
+
+	var fcylinder = new THREE.CylinderGeometry(0.7, 0.7, 0.5, 10);
+	var fwheel = new THREE.Mesh( fcylinder, cycleMaterial );
+		fwheel.position.set(2, -1.3, 0);
+		fwheel.rotateX(halfPi);
+
+
+	var fcylinderWire = new THREE.CylinderGeometry(0.7, 0.7, 0.5, 8, 1, true);
+	var fwheelWire = new THREE.Mesh( fcylinderWire, wireMaterial );
+		fwheelWire.position.set(2, -1.3, 0);
+		fwheelWire.rotateX(halfPi);
+
+
+	var ecylinder = new THREE.CylinderGeometry(0.5, 0.5, 2.5, 4);
+	var eng = new THREE.Mesh( ecylinder, wireMaterial );
+		eng.position.set(-0.2, -1, 0);
+		eng.rotateZ(halfPi);
+
+	var windshieldMaterial = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
+
+	var windshieldgeom = new THREE.PlaneBufferGeometry(2.01, 0.9);
+	var windshield = new THREE.Mesh( windshieldgeom, windshieldMaterial );
+		windshield.position.set(2.01, 1.1, 0);
+		windshield.rotateY(halfPi);
+
+	var windshieldSideGeom = new THREE.PlaneBufferGeometry(1.45, 0.9);
+	var windshield2 = new THREE.Mesh( windshieldSideGeom, windshieldMaterial );
+		windshield2.position.set(1.285, 1.1, 1.01);
+	var windshield3 = new THREE.Mesh( windshieldSideGeom, windshieldMaterial );
+		windshield3.position.set(1.285, 1.1, -1.01);
+
+
+	var model = new THREE.Object3D();
+		model.add(cube);
+		model.add(bwheel);
+		model.add(fwheel);
+		model.add(cubeWire);
+		model.add(bwheelWire);
+		model.add(fwheelWire);
+		model.add(eng);
+		model.add(windshield);
+		model.add(windshield2);
+		model.add(windshield3);
+
+	return model;
 };

@@ -59,6 +59,8 @@ var startGame = function(e) {
 
 var initGame = function() {
 
+	createGrid();
+
 	camera.lookAt(player1.position);
 
 	gauge.rubber.max.innerHTML = gauge.rubber.maxVal;
