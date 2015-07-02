@@ -5,7 +5,7 @@ var cycleConfig = {
 	x:  -320,
 	z: -2,
 	dir: 0,
-	colorCode: 0x0044ff,
+	colorCode: 0x0000ff,
 	engineType: 0,
 	ai: false,
 	playerID: 1,
