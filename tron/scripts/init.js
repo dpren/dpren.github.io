@@ -1,8 +1,9 @@
 "use strict";
 
 var clock = new THREE.Clock();
-var time;
+var elapsedTime;
 var delta;
+var frameTime = 0;
 
 
 var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -29,10 +30,10 @@ window.addEventListener('resize', resizeWindow );
 
 
 var stats = new Stats();
-	stats.domElement.style.position = 'absolute';
-	stats.domElement.style.top = '0px';
-	stats.domElement.style.visibility="hidden";
-	document.body.appendChild( stats.domElement );
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.top = '0px';
+stats.domElement.style.visibility = 'hidden';
+document.body.appendChild( stats.domElement );
 
 
 var pauseMsg = document.getElementById('pause-msg');
@@ -76,4 +77,3 @@ var paused = true;
 var showInfo = false;
 var view = 0;
 var viewTarget = 0;
-

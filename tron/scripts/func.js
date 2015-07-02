@@ -52,7 +52,7 @@ var toScreenPosition = function(obj, camera) {
     vector.x = ( vector.x * widthHalf ) + widthHalf;
     vector.y = - ( vector.y * heightHalf ) + heightHalf;
 
-    return { 
+    return {
         x: vector.x,
         y: vector.y
     };
@@ -64,13 +64,13 @@ var toScreenPosition = function(obj, camera) {
 //     var cameraToEarth = earth.position.clone().sub(camera.position);
 //     var L = Math.sqrt(Math.pow(cameraToEarth.length(), 2) - Math.pow(earthGeometry.parameters.radius, 2));
 
-//     for (var i = 0; i < pins.length; i++) { 
+//     for (var i = 0; i < pins.length; i++) {
 
 //         var cameraToPin = pins[i].position.clone().sub(camera.position);
 
-//         if(cameraToPin.length() > L) { 
+//         if(cameraToPin.length() > L) {
 //             pins[i].domlabel.style.visibility = "hidden";
-//         } else { 
+//         } else {
 //             pins[i].domlabel.style.visibility = "visible";
 //         }
 //     }
@@ -79,7 +79,7 @@ var toScreenPosition = function(obj, camera) {
 var fadeInLabel = function(cycle) {
 	cycle.textLabel.style.opacity = 0;
 	return function () {
-		
+
 		cycle.textLabel.style.opacity = cycle.textLabel.style.opacity*1 + .04;
 
 		if (cycle.textLabel.style.opacity >= 0.85) {
@@ -126,7 +126,7 @@ var minDistIndex = function(array) {
 	var minObj = R.minBy(function (obj) {
 		return obj.dist;
 	}, array);
-	
+
 	var minIndex = R.indexOf(minObj, array);
 
 	return minIndex;
@@ -144,7 +144,7 @@ var distanceBetween = function(p1, p2) {
 
 
 var changeViewTargetTo = function(i) {
-	
+
 	viewTarget = i;
 
 	var alivePlayersLength = R.findLastIndex(R.propEq('alive', true))(activePlayers);
@@ -166,7 +166,7 @@ var fixCockpitCam = function() {
 		if (cycle.walls.children.length) {
 			cycle.walls.children[ cycle.walls.children.length-1 ].visible = true;
 		}
-		if (!duckMode) {
+		if (!altCycleModel) {
 			cycle.model.visible = true;
 		}
 	});
@@ -197,7 +197,7 @@ var pause = function() {
 		pauseMsg.style.visibility = "hidden";
 		activePlayers.forEach( function (player) {
 			player.audio.gain.setTargetAtTime(6, ctx.currentTime, 0.02);
-			player.turnStack = []; // clear in case turn keys were pressed while paused
+			player.turnQueue = []; // clear in case turn keys were pressed while paused
 		});
 	}
 };
@@ -293,4 +293,41 @@ var cycleModel = function(colorCode) {
 		model.add(windshield3);
 
 	return model;
+};
+
+
+
+
+
+
+
+
+
+var animateOneFrame = function() {
+
+	activePlayers.forEach( function (cycle) {
+		if (cycle.alive) {
+			executeTurn(cycle);
+			handleBraking(cycle);
+			changeVelocity(cycle);
+			wallCheck(cycle);
+			wallAccelCheck(cycle);
+			AIWallCheck(cycle);
+			moveStuff(cycle);
+			handleRubber(cycle);
+			updateLabel(cycle);
+		}
+
+		cycle.renderList.forEach( function (el, i) {
+			el();
+		});
+
+		audioMixing(cycle);
+	});
+
+
+	if (activePlayers[viewTarget] && activePlayers[viewTarget].alive === true) {
+		cameraView(activePlayers[viewTarget]);
+		updateGauges(activePlayers[viewTarget]);
+	}
 };

@@ -10,7 +10,9 @@ var bufferLoader = new BufferLoader(
      "sounds/crash1.wav",
      "sounds/rubberHit.mp3",
      "sounds/wallCollapse.mp3",
-     "sounds/crash1.wav",
+     "sounds/crash2.wav",
+     "sounds/crash3.wav",
+     "sounds/riser2.wav"
     ]
     );
 bufferLoader.load();
