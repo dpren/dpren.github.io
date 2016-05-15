@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "start": "budo index.js --live --css main.css",
+    "build": "browserify index.js | uglifyjs > index.min.js",
+    "test": "standard index.js"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.1.18",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "lodash": "^4.6.1",
+    "p5": "^0.4.13"
+  },
+  "devDependencies": {
+    "budo": "^6.1.0",
+    "uglify-js": "^2.4.13"
+  }
+}
