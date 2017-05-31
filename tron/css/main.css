@@ -22,7 +22,7 @@ html {
 }
 
 body {
-	overflow-y: hidden;
+	overflow: hidden;
 }
 
 canvas {
@@ -44,14 +44,14 @@ a {
 
 #welcome-msg {
 	position: absolute;
-	width: 100%;	
+	width: 100%;
 	height: 100%;
 	left: 0;
 	right: 0;
 	margin: 0 auto;
 	background-color: rgba(10,10,10, 0.8);
 
-	color: #dafcf1;	
+	color: #dafcf1;
 	text-shadow: 0px -1px 0px #000, 0 0 20px rgba(218, 252, 241, 0.5);
 }
 
@@ -64,11 +64,21 @@ a {
 }
 
 
+@keyframes pulse {
+  0% {opacity: 0.3;}
+  50% {opacity: 0.7;}
+  100% {opacity: 0.3;}
+}
+.pulse {
+  animation-iteration-count: infinite;
+  animation-name: pulse;
+  animation-duration: 1.1s;
+}
 
 
 #press-z, #press-x {
 	font-family:  fontawesome, sans-serif;
-	opacity: 0.4;
+	opacity: 0.6;
 	visibility: hidden;
 }
 
@@ -98,7 +108,7 @@ a {
   bottom: 0;
   right: 0;
   position: absolute;
-  z-index: -1;   
+  z-index: -1;
 }
 
 #usernameInput {
@@ -111,7 +121,7 @@ a {
 	color: #fff;
 	font-size: 170%;
 	text-align: center;
-	
+
 	text-shadow: 0px -1px 0px #000, 0 0 20px rgba(66,172,237, .6);
 	transition: .4s ease;
 }

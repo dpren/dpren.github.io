@@ -12,19 +12,22 @@ var handleKeyDown = function(e) {
 	switch ( e.keyCode ) {
 		case 70: // left
 		case 68:
-		case 83: 	
-		case 65: 	
+		case 83:
+		case 65:
+        case 37:
 					player1.turnQueue.push(turnLeft(player1));
 					break;
 
 		case 74: // right
 		case 75:
 		case 76:
-		case 186:   
+		case 186:
+        case 39:
 					player1.turnQueue.push(turnRight(player1));
 					break;
 
 		case 32: // space
+        case 40:
 					player1.braking = true;
 					break;
 		case 66: // b
@@ -53,7 +56,7 @@ var handleKeyDown = function(e) {
 		case 90: // z
 					if (player1.respawnAvailable === true) {
 						player1.turnQueue = []; // clear in case turn keys were pressed while dead
-						
+
 						var spawnCheck = function() {
 
 							var randX = Math.max(-arenaSize + 20,  Math.min(-200, (Math.random() * arenaSize - arenaSize)));
@@ -64,7 +67,7 @@ var handleKeyDown = function(e) {
 							var spawnCollision = detectCollisionsBetween(player1, offset, offset2, true);
 
 							return (function() {
-								
+
 								if (spawnCollision) {
 									return spawnCheck();
 
@@ -80,7 +83,7 @@ var handleKeyDown = function(e) {
 						var spawn = spawnCheck();
 
 						player1 = spawnCycle(player1, spawn.x, spawn.z, 1, false);
-						
+
 						fixCockpitCam();
 					}
 					break;
