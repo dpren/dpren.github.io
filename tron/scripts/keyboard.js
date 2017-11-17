@@ -204,6 +204,7 @@ var handleKeyUp = function(e) {
 	switch ( e.keyCode ) {
 
 		case 32: // space
+		case 40:
 					player1.braking = false;
 					break;
 		case 66: // b
