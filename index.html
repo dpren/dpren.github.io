@@ -1,43 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@dpren</title>
-
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-    <style type="text/css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>dpren</title>
+    <meta name="description" content="yo">
+    <meta name="viewport" content="width=device-width">
+    <style media="screen">
       body {
-        font-family: 'Open Sans', sans-serif;
-        font-size: 28px;
-        line-height: 1.3;
-        padding: 1em;
-        color: #333;
+        background-color: black;
+        opacity: 0;
       }
-      a {
-        color: #6489ff;
-        text-decoration: none;
-      }
-      p {
-        max-width: 700px;
-        margin: 1em auto;
+      .glslCanvas {
+        opacity: 0;
       }
     </style>
-
-</head>
-<body>
-    
-    <p>
-        I'm Darren, a programmer.
-    </p>
-    <p>
-        <a href="mailto:prenticedarren@gmail.com">prenticedarren@gmail.com</a>
-    </p>
-
-    <br>
-    <p>
-         <i>"...what's <a href="https://github.com/dpren">Gi-Thub</a>?"</i>  –my mom <img class="emoji" title=":heart:" alt=":heart:" src="https://assets-cdn.github.com/images/icons/emoji/heart.png" height="32" width="32" align="absmiddle">
-    </p>
-
-</body>
+  </head>
+  <body>
+    <canvas class="glslCanvas" data-fragment-url="shader3.frag"></canvas>
+    <div class="container">
+      <div class="centerBox">
+        <h1>
+          <a href="https://dpren.github.io/tron">d</a>pr<a href="https://dpren.github.io/viz2">e</a><a href="https://youtu.be/9yg3s77nAMQ">n</a>
+        </h1>
+        <p>
+          <a href="https://github.com/dpren">github</a>
+          <span class="courtesyDivider">|</span>
+          <a href="http://www.google.com/recaptcha/mailhide/d?k=01rQhzKwycTYGCMJyEIVxtBA==&amp;c=3-P5uYp_pWBmumwbo_y3fRdzs4SjpmCDb77IthCXDX4="
+            onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\x3d01rQhzKwycTYGCMJyEIVxtBA\x3d\x3d\x26c\x3d3-P5uYp_pWBmumwbo_y3fRdzs4SjpmCDb77IthCXDX4\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;"
+            title="Reveal this e-mail address"
+          >contact</a>
+        </p>
+      </div>
+    </div>
+    <!-- <div class="foot">
+      <p><a href="https://www.gnu.org/licenses/gpl-3.0.en.html">licence</a> | <a href="https://github.com/dpren/dpren.github.io">source</a></p>
+    </div> -->
+  </body>
+  <script type="text/javascript" src="app.js"></script>
 </html>
