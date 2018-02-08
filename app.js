@@ -3173,9 +3173,10 @@
 	function setupWebGL(canvas, optAttribs) {
 	    function showLink(str) {
 	        var container = canvas.parentNode;
-	        if (container) {
-	            container.innerHTML = makeFailHTML(str);
-	        }
+					container.removeChild(canvas);
+	        // if (container) {
+	        //     container.innerHTML = makeFailHTML(str);
+	        // }
 	    }
 
 	    if (!window.WebGLRenderingContext) {
