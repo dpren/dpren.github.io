@@ -2418,10 +2418,21 @@
 	            x: 0,
 	            y: 0
 	        };
-	        document.addEventListener('mousedown', function (e) {
-	            mouse.x = e.clientX || e.pageX;
-	            mouse.y = e.clientY || e.pageY;
-	        }, false);
+					var flag = 0;
+					document.addEventListener('mousedown', function() {
+						flag = 1;
+					}, false);
+					document.addEventListener('mousemove', function(e) {
+						var classList = e.target.classList;
+						if (flag !== 1 || classList && classList[0] !== 'container') {
+							return;
+						}
+						mouse.x = (e.clientX || e.pageX);
+						mouse.y = window.innerHeight - (e.clientY || e.pageY);
+					}, false);
+					document.addEventListener('mouseup', function() {
+						flag = 0;
+					}, false);
 
 	        var sandbox = this;
 	        function RenderLoop() {
