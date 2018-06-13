@@ -88,7 +88,7 @@ import { scaleLinear } from &#39;d3-scale&#39;;
 
 const maxValue = data =&gt; Math.max(...data.map(d =&gt; d.value));
 
-const barChart = ({data, width, height}) =&gt; {
+const BarChart = ({data, width, height}) =&gt; {
   const barWidth = width / data.length;
   const yScale = scaleLinear()
     .domain([0, maxValue(data)])
@@ -117,7 +117,7 @@ const barChart = ({data, width, height}) =&gt; {
 };
 
 ReactDOM.render(
-  &lt;App data={myData} width={800} height={400}/&gt;, 
+  &lt;BarChart data={myData} width={800} height={400}/&gt;, 
   document.getElementById(&#39;root&#39;)
 );</code></pre>
 <p>Now you can literally see the DOM structure. There&#39;s just one map callback instead of 5. The flow of data is clear because it all just breaks down into a composite of pure functions and values. The only impure function is <code>render</code>, and we can just use common React patterns to deal with updates.</p>

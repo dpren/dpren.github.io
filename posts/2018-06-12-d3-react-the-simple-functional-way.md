@@ -93,7 +93,7 @@ import { scaleLinear } from 'd3-scale';
 
 const maxValue = data => Math.max(...data.map(d => d.value));
 
-const barChart = ({data, width, height}) => {
+const BarChart = ({data, width, height}) => {
   const barWidth = width / data.length;
   const yScale = scaleLinear()
     .domain([0, maxValue(data)])
@@ -122,7 +122,7 @@ const barChart = ({data, width, height}) => {
 };
 
 ReactDOM.render(
-  <App data={myData} width={800} height={400}/>, 
+  <BarChart data={myData} width={800} height={400}/>, 
   document.getElementById('root')
 );
 ```
