@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 &amp; React: the simple, functional way</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="blog.css">
+    <link rel="stylesheet" href="prism.css">
+    <script src="prism.js"></script>
+  </head>
+  <body>
+    <div class="container" style="padding-top: 30px">
+      <a href="../posts/index.html">← blog</a>
+
+      
+<h2 id="d3-react-the-simple-functional-way">D3 &amp; React: the simple, functional way</h2>
+<p>Avoid <a href="https://en.wikipedia.org/wiki/Functional_fixedness">functional fixedness</a>! If you&#39;re going to use D3, use it for what it does well: maths and geometry calculations. For the 40-something other modules, you can probably find much nicer alternatives in the JS ecosystem, some of which may already be dependencies in your project. Why learn another date API? Just use your project&#39;s moment.js or date-fns.</p>
+<p>Already using a view library like React? Forget D3&#39;s DOM manipulation API.</p>
+<p>Here&#39;s the scoop.</p>
+<p>D3 and React were created around the same time in 2011. Both projects had the early insight to design a declerative API, inspired by functional programming. This was still a new idea at the time for JavaScript. Unlike React, D3 went the route of trying to respect DOM standards and conventions of the time. You&#39;ll find a very jQuery-esque API based on W3C selector strings.</p>
+<p>Let&#39;s see an example of how you&#39;d build this bar chart in D3:</p>
+<p><img src="https://dpren.github.io/posts/bar-chart.png" alt="bar chart" title="bar chart"></p>
+<pre><code class="language-javascript">const myData = [
+  {name: &quot;A&quot;, value: 0.08167},
+  {name: &quot;B&quot;, value: 0.01492},
+  {name: &quot;C&quot;, value: 0.02782},
+  {name: &quot;D&quot;, value: 0.04253},
+  {name: &quot;E&quot;, value: 0.12702},
+  {name: &quot;F&quot;, value: 0.02288},
+  {name: &quot;G&quot;, value: 0.02015},
+  {name: &quot;H&quot;, value: 0.06094},
+  {name: &quot;I&quot;, value: 0.06966},
+  {name: &quot;J&quot;, value: 0.00153},
+  {name: &quot;K&quot;, value: 0.00772},
+  {name: &quot;L&quot;, value: 0.04025},
+  {name: &quot;M&quot;, value: 0.02406},
+  {name: &quot;N&quot;, value: 0.06749},
+  {name: &quot;O&quot;, value: 0.07507},
+  {name: &quot;P&quot;, value: 0.01929},
+  {name: &quot;Q&quot;, value: 0.00095},
+  {name: &quot;R&quot;, value: 0.05987},
+  {name: &quot;S&quot;, value: 0.06327},
+  {name: &quot;T&quot;, value: 0.09056},
+  {name: &quot;U&quot;, value: 0.02758},
+  {name: &quot;V&quot;, value: 0.00978},
+  {name: &quot;W&quot;, value: 0.0236},
+  {name: &quot;X&quot;, value: 0.0015},
+  {name: &quot;Y&quot;, value: 0.01974},
+  {name: &quot;Z&quot;, value: 0.00074}
+];</code></pre>
+<pre><code class="language-javascript">var width = 800;
+var height = 400;
+
+// not using d3.scaleBand for the sake of simplicity
+var barWidth = width / myData.length;
+var maxValue = Math.max(...myData.map(d =&gt; d.value));
+var yScale = scaleLinear()
+  .domain([0, maxValue])
+  .range([height, 0]);
+
+var svg = d3.select(&quot;body&quot;)
+  .append(&quot;svg&quot;)
+  .attr(&quot;width&quot;, width)
+  .attr(&quot;height&quot;, height);
+
+var bars = svg.selectAll(&quot;.bar&quot;)
+  .data(myData)
+  .enter()
+  .append(&quot;g&quot;)
+    .attr(&quot;transform&quot;, 
+          function(d, i) { return &quot;translate(&quot;+ (i * barWidth) +&quot;, 0)&quot;; });
+
+bars.append(&quot;rect&quot;)
+  .attr(&quot;y&quot;, function(d) { return yScale(d.value); })
+  .attr(&quot;width&quot;, barWidth - 3)
+  .attr(&quot;height&quot;, function(d) { return height - yScale(d.value); });
+
+bars.append(&quot;text&quot;)
+  .attr(&quot;x&quot;, barWidth / 2)
+  .attr(&quot;y&quot;, function(d) { return yScale(d.value) - 10; })
+  .attr(&quot;text-anchor&quot;, &quot;middle&quot;)
+  .text(function(d) { return d.name });</code></pre>
+<p>This API is unwieldy because, while it&#39;s declerative in spirit, you&#39;re still commanding this opaque chain of side-effects, saying &quot;Select this, append that, add this attribute, etc.&quot; What does <code>.data()</code> or <code>.enter()</code> do?  What sort of value do any of these methods return? How do the callbacks in <code>.attr()</code> get magically mapped to the data? I still find myself having to sift through loads of documentation and examples whenever I use D3.</p>
+<p>Let&#39;s try this with React:</p>
+<pre><code class="language-jsx">import React from &#39;react&#39;;
+import ReactDOM from &#39;react-dom&#39;;
+import { scaleLinear } from &#39;d3-scale&#39;;
+
+const maxValue = data =&gt; Math.max(...data.map(d =&gt; d.value));
+
+const barChart = ({data, width, height}) =&gt; {
+  const barWidth = width / data.length;
+  const yScale = scaleLinear()
+    .domain([0, maxValue(data)])
+    .range([height, 0]);
+
+  return (
+    &lt;svg width={width} height={height}&gt;
+      {
+        data.map(({name, value}, i) =&gt; (
+          &lt;g key={i} transform={`translate(${i * barWidth}, 0)`}&gt;
+            &lt;rect 
+              y={yScale(value)} 
+              height={height - yScale(value)} 
+              width={barWidth - 3}
+            /&gt;
+            &lt;text 
+              x={barWidth / 2} 
+              y={yScale(value) - 10} 
+              text-anchor=&quot;middle&quot;
+            &gt;{name}&lt;/text&gt;
+          &lt;/g&gt;
+        ))
+      }      
+    &lt;/svg&gt;
+  );
+};
+
+ReactDOM.render(
+  &lt;App data={myData} width={800} height={400}/&gt;, 
+  document.getElementById(&#39;root&#39;)
+);</code></pre>
+<p>Now you can literally see the DOM structure. There&#39;s just one map callback instead of 5. The flow of data is clear because it all just breaks down into a composite of pure functions and values. The only impure function is <code>render</code>, and we can just use common React patterns to deal with updates.</p>
+<p>Hope this helps.</p>
+
+
+    </div>
+  </body>
+</html>

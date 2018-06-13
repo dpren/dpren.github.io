@@ -8,64 +8,66 @@
   </head>
   <body>
     <div class="container" style="padding-top: 30px">
+      <a href="../posts/index.html">← blog</a>
       
-      <h6 id="algebraic-data-types">Algebraic data types:</h6>
-      <h2 id="sum-type-vs.product-type">Sum type vs. Product type</h2>
-      <h5 id="refers-to-how-you-would-calculate-a-types-number-of-possible-values.">Refers to how you would calculate a type’s number of possible values.</h5>
-      <ul>
-      <li><h5 id="sum-is-logical-alternation">“sum” is logical alternation</h5>
-      <p>A <strong><em>or</em></strong> B<br />
-      <code>a | b</code></p></li>
-      <li><h5 id="product-is-a-combination-of-alternation">“product” is a combination of alternation</h5>
-      <p>(A <em>or</em> B) <strong><em>and</em></strong> (C <em>or</em> D)<br />
-      <code>a | b, c | d</code></p></li>
-      </ul>
-      <div style="padding: 10px 0 1px 0">
-      <hr />
-      </div>
-      <h3 id="sum-type">Sum type</h3>
-      <h6 id="eg.-either-maybe">eg. Either, Maybe</h6>
-      <ul>
-      <li><code>Bool</code> is a set of 2 values.</li>
-      <li><p><code>Char</code> is a set of 256 values.</p>
-      </ul>
-      <pre><code>data MySumType = Foo Bool | Bar Char
-                       2            + 256
-                      True | False | &#39;a&#39; | &#39;b&#39; | &#39;c&#39; | ...</code></pre>
-      
-      <p><code>MySumType</code> is a set of 2 + 256 possible values.</p>
-      <br>
-      <h3 id="product-type">Product type</h3>
-      <h6 id="eg.-tuple-record">eg. tuple, record</h6>
-      <pre><code>data MyProductType = Baz (Bool, Char)
-      
-                 *    256                        
-                 2   (True,  &#39;a&#39;) | (True,  &#39;b&#39;) | (True,  &#39;c&#39;) | ...
-                     (False, &#39;a&#39;) | (False, &#39;b&#39;) | (False, &#39;c&#39;) | ...</code></pre>
-      <p><code>MyProductType</code> is a set of 2 * 256 possible values.</p>
-      <br>
-      <pre><code>data MyProductType2 = Baz (Char, Char)
-      
-                 *    256  ––&gt;
-                256  (&#39;a&#39;, &#39;a&#39;) | (&#39;a&#39;, &#39;b&#39;) | (&#39;a&#39;, &#39;c&#39;) | ...
-                     (&#39;b&#39;, &#39;a&#39;) | (&#39;b&#39;, &#39;b&#39;) | (&#39;b&#39;, &#39;c&#39;) | ...
-                 |   (&#39;c&#39;, &#39;a&#39;) | (&#39;c&#39;, &#39;b&#39;) | (&#39;c&#39;, &#39;c&#39;) | ...
-                 V   (&#39;d&#39;, &#39;a&#39;) | (&#39;d&#39;, &#39;b&#39;) | (&#39;d&#39;, &#39;c&#39;) | ...
-                     (&#39;e&#39;, &#39;a&#39;) | (&#39;e&#39;, &#39;b&#39;) | (&#39;e&#39;, &#39;c&#39;) | ...
-                     (&#39;f&#39;, &#39;a&#39;) | (&#39;f&#39;, &#39;b&#39;) | (&#39;f&#39;, &#39;c&#39;) | ...
-                     (&#39;g&#39;, &#39;a&#39;) | (&#39;g&#39;, &#39;b&#39;) | (&#39;g&#39;, &#39;c&#39;) | ...
-                     ...</code></pre>
-      <p><code>MyProductType2</code> is a set of 256 * 256 possible values.</p>
-      <br>
-      <pre><code>data Person = Person {
-                  isCool  :: Bool
-                  favChar :: Char,
-              }
+<h6 id="algebraic-data-types">Algebraic data types:</h6>
+<h2 id="sum-type-vs.product-type">Sum type vs. Product type</h2>
+<h5 id="refers-to-how-you-would-calculate-a-types-number-of-possible-values.">Refers to how you would calculate a type’s number of possible values.</h5>
+<ul>
+<li><h5 id="sum-is-logical-alternation">“sum” is logical alternation</h5>
+<p>A <strong><em>or</em></strong> B<br />
+<code>a | b</code></p></li>
+<li><h5 id="product-is-a-combination-of-alternation">“product” is a combination of alternation</h5>
+<p>(A <em>or</em> B) <strong><em>and</em></strong> (C <em>or</em> D)<br />
+<code>a | b, c | d</code></p></li>
+</ul>
+<div style="padding: 10px 0 1px 0">
+<hr />
+</div>
+<h3 id="sum-type">Sum type</h3>
+<h6 id="eg.-either-maybe">eg. Either, Maybe</h6>
+<ul>
+<li><code>Bool</code> is a set of 2 values.</li>
+<li><p><code>Char</code> is a set of 256 values.</p>
+</ul>
+<pre><code>data MySumType = Foo Bool | Bar Char
 
-                 *    256 ––&gt;                  
-                 2   Person {isCool = True,  favChar = &#39;a&#39;} | ...
-                     Person {isCool = False, favChar = &#39;a&#39;} | ...</code></pre>
-      <p>Hopefully you get the idea.</p>        
+                 2            + 256
+                 True | False | &#39;a&#39; | &#39;b&#39; | &#39;c&#39; | ...</code></pre>
+
+<p><code>MySumType</code> is a set of 2 + 256 possible values.</p>
+<br>
+<h3 id="product-type">Product type</h3>
+<h6 id="eg.-tuple-record">eg. tuple, record</h6>
+<pre><code>data MyProductType = Baz (Bool, Char)
+
+                *    256  ––&gt;
+                2   (True,  &#39;a&#39;) | (True,  &#39;b&#39;) | (True,  &#39;c&#39;) | ...
+                    (False, &#39;a&#39;) | (False, &#39;b&#39;) | (False, &#39;c&#39;) | ...</code></pre>
+<p><code>MyProductType</code> is a set of 2 * 256 possible values.</p>
+<br>
+<pre><code>data MyProductType2 = Baz (Char, Char)
+
+                *    256  ––&gt;
+               256  (&#39;a&#39;, &#39;a&#39;) | (&#39;a&#39;, &#39;b&#39;) | (&#39;a&#39;, &#39;c&#39;) | ...
+                    (&#39;b&#39;, &#39;a&#39;) | (&#39;b&#39;, &#39;b&#39;) | (&#39;b&#39;, &#39;c&#39;) | ...
+                |   (&#39;c&#39;, &#39;a&#39;) | (&#39;c&#39;, &#39;b&#39;) | (&#39;c&#39;, &#39;c&#39;) | ...
+                V   (&#39;d&#39;, &#39;a&#39;) | (&#39;d&#39;, &#39;b&#39;) | (&#39;d&#39;, &#39;c&#39;) | ...
+                    (&#39;e&#39;, &#39;a&#39;) | (&#39;e&#39;, &#39;b&#39;) | (&#39;e&#39;, &#39;c&#39;) | ...
+                    (&#39;f&#39;, &#39;a&#39;) | (&#39;f&#39;, &#39;b&#39;) | (&#39;f&#39;, &#39;c&#39;) | ...
+                    (&#39;g&#39;, &#39;a&#39;) | (&#39;g&#39;, &#39;b&#39;) | (&#39;g&#39;, &#39;c&#39;) | ...
+                    ...</code></pre>
+<p><code>MyProductType2</code> is a set of 256 * 256 possible values.</p>
+<br>
+<pre><code>data Person = Person {
+            isCool  :: Bool
+            favChar :: Char,
+        }
+
+            *    256 ––&gt;                  
+            2   Person {isCool = True,  favChar = &#39;a&#39;} | ...
+                Person {isCool = False, favChar = &#39;a&#39;} | ...</code></pre>
+<p>Hopefully you get the idea.</p>        
       
     </div>
   </body>
