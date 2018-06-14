@@ -17,7 +17,7 @@
 <p>Avoid <a href="https://en.wikipedia.org/wiki/Functional_fixedness">functional fixedness</a>! If you&#39;re going to use D3, use it for what it does well: math and geometry calculations. For the other modules, you can probably find much nicer alternatives in the JS ecosystem, some of which may already be dependencies in your project. Why learn another date API? Just use your project&#39;s moment.js or date-fns.</p>
 <p>Already using a view library like React? Forget D3&#39;s DOM manipulation API.</p>
 <p>Here&#39;s the scoop.</p>
-<p>D3 and React were created around the same time in 2011. Both projects had the early insight to design a declerative API, inspired by functional programming. This was still a new idea at the time for JavaScript. Unlike React, D3 went the route of trying to respect DOM standards and conventions of the time. You&#39;ll find a very jQuery-esque API based on W3C selector strings.</p>
+<p>D3 and React were created around the same time in 2011. Both projects had the early insight to design a declarative API, inspired by functional programming. This was still a new idea at the time for JavaScript. Unlike React, D3 went the route of trying to respect DOM standards and conventions of the time. You&#39;ll find a very jQuery-esque API based on W3C selector strings.</p>
 <p>Let&#39;s see how you&#39;d traditionally build this bar chart with D3:</p>
 <p><img src="https://dpren.github.io/posts/bar-chart.png" alt="bar chart" title="bar chart"></p>
 <pre style="height:140px;"><code class="language-javascript">const myData = [
@@ -80,7 +80,7 @@ bars.append(&quot;text&quot;)
   .attr(&quot;y&quot;, function(d) { return yScale(d.value) - 10; })
   .attr(&quot;text-anchor&quot;, &quot;middle&quot;)
   .text(function(d) { return d.name });</code></pre>
-<p>This API is unwieldy because, while it&#39;s declerative in spirit, you&#39;re still commanding this opaque chain of side-effects, saying &quot;Select this, append that, add this attribute, etc.&quot; What does <code>.data()</code> or <code>.enter()</code> do?  What sort of value do any of these methods return? How do the callbacks in <code>.attr()</code> get magically mapped to the data? I still find myself having to sift through loads of documentation and examples whenever I use D3.</p>
+<p>This API is unwieldy because, while it&#39;s declarative in spirit, you&#39;re still commanding this opaque chain of side-effects, saying &quot;Select this, append that, add this attribute, etc.&quot; What does <code>.data()</code> or <code>.enter()</code> do?  What sort of value do any of these methods return? How do the callbacks in <code>.attr()</code> get magically mapped to the data? I still find myself having to sift through loads of documentation and examples whenever I use D3.</p>
 <p>Let&#39;s try this with React:</p>
 <pre><code class="language-jsx">import React from &#39;react&#39;;
 import ReactDOM from &#39;react-dom&#39;;

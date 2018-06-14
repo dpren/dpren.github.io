@@ -7,7 +7,7 @@ Already using a view library like React? You probably don't need D3's DOM manipu
 
 Here's the scoop.
 
-D3 and React were created around the same time in 2011. Both projects had the early insight to design a declerative API, inspired by functional programming. This was still a new idea at the time for JavaScript. Unlike React, D3 went the route of trying to respect DOM standards and conventions of the time. You'll find a very jQuery-esque API based on W3C selector strings.
+D3 and React were created around the same time in 2011. Both projects had the early insight to design a declarative API, inspired by functional programming. This was still a new idea at the time for JavaScript. Unlike React, D3 went the route of trying to respect DOM standards and conventions of the time. You'll find a very jQuery-esque API based on W3C selector strings.
 
 Let's see how you'd traditionally build this bar chart with D3:
 
@@ -80,7 +80,7 @@ bars.append("text")
 ```
 
 
-This API is unwieldy because, while it's declerative in spirit, you're still commanding this opaque chain of side-effects, saying "Select this, append that, add this attribute, etc." What does `.data()` or `.enter()` do?  What sort of value do any of these methods return? How do the callbacks in `.attr()` get magically mapped to the data? I still find myself having to sift through loads of documentation and examples whenever I use D3.
+This API is unwieldy because, while it's declarative in spirit, you're still commanding this opaque chain of side-effects, saying "Select this, append that, add this attribute, etc." What does `.data()` or `.enter()` do?  What sort of value do any of these methods return? How do the callbacks in `.attr()` get magically mapped to the data? I still find myself having to sift through loads of documentation and examples whenever I use D3.
 
 
 Let's try this with React:
