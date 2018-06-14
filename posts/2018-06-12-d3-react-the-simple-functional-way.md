@@ -1,15 +1,15 @@
 ## D3 & React: the simple, functional way
 
 
-Avoid [functional fixedness](https://en.wikipedia.org/wiki/Functional_fixedness)! If you're going to use D3, use it for what it does well: maths and geometry calculations. For the 40-something other modules, you can probably find much nicer alternatives in the JS ecosystem, some of which may already be dependencies in your project. Why learn another date API? Just use your project's moment.js or date-fns.
+Avoid [functional fixedness](https://en.wikipedia.org/wiki/Functional_fixedness)! If you're going to use D3, use it for what it does well: math and geometry calculations. For the other modules, you can probably find much nicer alternatives in the JS ecosystem, some of which may already be dependencies in your project. Why learn another date API? Just use your project's moment.js or date-fns.
 
-Already using a view library like React? Forget D3's DOM manipulation API.
+Already using a view library like React? You probably don't need D3's DOM manipulation API.
 
 Here's the scoop.
 
 D3 and React were created around the same time in 2011. Both projects had the early insight to design a declerative API, inspired by functional programming. This was still a new idea at the time for JavaScript. Unlike React, D3 went the route of trying to respect DOM standards and conventions of the time. You'll find a very jQuery-esque API based on W3C selector strings.
 
-Let's see an example of how you'd build this bar chart in D3:
+Let's see how you'd traditionally build this bar chart with D3:
 
 ![bar chart](https://dpren.github.io/posts/bar-chart.png "bar chart")
 
@@ -51,7 +51,7 @@ var height = 400;
 // not using d3.scaleBand for the sake of simplicity
 var barWidth = width / myData.length;
 var maxValue = Math.max(...myData.map(d => d.value));
-var yScale = scaleLinear()
+var yScale = d3.scaleLinear()
   .domain([0, maxValue])
   .range([height, 0]);
 
@@ -65,12 +65,12 @@ var bars = svg.selectAll(".bar")
   .enter()
   .append("g")
     .attr("transform", 
-          function(d, i) { return "translate("+ (i * barWidth) +", 0)"; });
+          function(d, i) { return `translate(${i * barWidth}, 0)`; });
 
 bars.append("rect")
   .attr("y", function(d) { return yScale(d.value); })
-  .attr("width", barWidth - 3)
   .attr("height", function(d) { return height - yScale(d.value); });
+  .attr("width", barWidth - 3)
 
 bars.append("text")
   .attr("x", barWidth / 2)

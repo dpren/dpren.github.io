@@ -14,11 +14,11 @@
 
       
 <h2 id="d3-react-the-simple-functional-way">D3 &amp; React: the simple, functional way</h2>
-<p>Avoid <a href="https://en.wikipedia.org/wiki/Functional_fixedness">functional fixedness</a>! If you&#39;re going to use D3, use it for what it does well: maths and geometry calculations. For the 40-something other modules, you can probably find much nicer alternatives in the JS ecosystem, some of which may already be dependencies in your project. Why learn another date API? Just use your project&#39;s moment.js or date-fns.</p>
+<p>Avoid <a href="https://en.wikipedia.org/wiki/Functional_fixedness">functional fixedness</a>! If you&#39;re going to use D3, use it for what it does well: math and geometry calculations. For the other modules, you can probably find much nicer alternatives in the JS ecosystem, some of which may already be dependencies in your project. Why learn another date API? Just use your project&#39;s moment.js or date-fns.</p>
 <p>Already using a view library like React? Forget D3&#39;s DOM manipulation API.</p>
 <p>Here&#39;s the scoop.</p>
 <p>D3 and React were created around the same time in 2011. Both projects had the early insight to design a declerative API, inspired by functional programming. This was still a new idea at the time for JavaScript. Unlike React, D3 went the route of trying to respect DOM standards and conventions of the time. You&#39;ll find a very jQuery-esque API based on W3C selector strings.</p>
-<p>Let&#39;s see an example of how you&#39;d build this bar chart in D3:</p>
+<p>Let&#39;s see how you&#39;d traditionally build this bar chart with D3:</p>
 <p><img src="https://dpren.github.io/posts/bar-chart.png" alt="bar chart" title="bar chart"></p>
 <pre style="height:140px;"><code class="language-javascript">const myData = [
   {name: &quot;A&quot;, value: 0.08167},
@@ -54,7 +54,7 @@ var height = 400;
 // not using d3.scaleBand for the sake of simplicity
 var barWidth = width / myData.length;
 var maxValue = Math.max(...myData.map(d =&gt; d.value));
-var yScale = scaleLinear()
+var yScale = d3.scaleLinear()
   .domain([0, maxValue])
   .range([height, 0]);
 
@@ -72,8 +72,8 @@ var bars = svg.selectAll(&quot;.bar&quot;)
 
 bars.append(&quot;rect&quot;)
   .attr(&quot;y&quot;, function(d) { return yScale(d.value); })
-  .attr(&quot;width&quot;, barWidth - 3)
   .attr(&quot;height&quot;, function(d) { return height - yScale(d.value); });
+  .attr(&quot;width&quot;, barWidth - 3)
 
 bars.append(&quot;text&quot;)
   .attr(&quot;x&quot;, barWidth / 2)
