@@ -69,7 +69,7 @@ var bars = svg.selectAll(".bar")
 
 bars.append("rect")
   .attr("y", function(d) { return yScale(d.value); })
-  .attr("height", function(d) { return height - yScale(d.value); });
+  .attr("height", function(d) { return height - yScale(d.value); })
   .attr("width", barWidth - 3)
 
 bars.append("text")
@@ -79,6 +79,7 @@ bars.append("text")
   .text(function(d) { return d.name });
 ```
 
+[CodePen [&#x2197;]](https://codepen.io/anon/pen/qKPVrg?editors=0010)
 
 This API is unwieldy because, while it's declarative in spirit, you're still commanding this opaque chain of side-effects, saying "Select this, append that, add this attribute, etc." What does `.data()` or `.enter()` do?  What sort of value do any of these methods return? How do the callbacks in `.attr()` get magically mapped to the data? I still find myself having to sift through loads of documentation and examples whenever I use D3.
 
@@ -112,7 +113,7 @@ const BarChart = ({data, width, height}) => {
             <text 
               x={barWidth / 2} 
               y={yScale(value) - 10} 
-              text-anchor="middle"
+              textAnchor="middle"
             >{name}</text>
           </g>
         ))
@@ -126,6 +127,8 @@ ReactDOM.render(
   document.getElementById('root')
 );
 ```
+
+[CodePen [&#x2197;]](https://codepen.io/anon/pen/xzXrXm?editors=1010)
 
 Now you can literally see the DOM structure. There's just one map callback instead of 5. The flow of data is clear because it all just breaks down into a composite of pure functions and values. The only impure function is `render`, and we can just use common React patterns to deal with updates.
 
