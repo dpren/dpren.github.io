@@ -80,7 +80,7 @@ bars.append(&quot;text&quot;)
   .attr(&quot;y&quot;, function(d) { return yScale(d.value) - 10; })
   .attr(&quot;text-anchor&quot;, &quot;middle&quot;)
   .text(function(d) { return d.name });</code></pre>
-<p><a href="https://codepen.io/anon/pen/qKPVrg?editors=0010">CodePen [&#x2197;]</a></p>
+<p><a href="https://codepen.io/anon/pen/qKPVrg?editors=0010">CodePen Demo</a></p>
 <p>This API is unwieldy because, while it&#39;s declarative in spirit, you&#39;re still commanding this opaque chain of side-effects, saying &quot;Select this, append that, add this attribute, etc.&quot; What does <code>.data()</code> or <code>.enter()</code> do?  What sort of value do any of these methods return? How do the callbacks in <code>.attr()</code> get magically mapped to the data? I still find myself having to sift through loads of documentation and examples whenever I use D3.</p>
 <p>Let&#39;s try this with React:</p>
 <pre><code class="language-jsx">import React from &#39;react&#39;;
@@ -121,7 +121,7 @@ ReactDOM.render(
   &lt;BarChart data={myData} width={800} height={400}/&gt;, 
   document.getElementById(&#39;root&#39;)
 );</code></pre>
-<p><a href="https://codepen.io/anon/pen/xzXrXm?editors=1010">CodePen [&#x2197;]</a></p>
+<p><a href="https://codepen.io/anon/pen/xzXrXm?editors=1010">CodePen Demo</a></p>
 <p>Now you can literally see the DOM structure. There&#39;s just one map callback instead of 5. The flow of data is clear because it all just breaks down into a composite of pure functions and values. The only impure function is <code>render</code>, and we can just use common React patterns to deal with updates.</p>
 <p>Hope this helps.</p>
 
